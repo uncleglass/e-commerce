@@ -6,6 +6,5 @@ import pl.uncleglass.ecommerce.model.persistence.Item;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-	public List<Item> findByName(String name);
-
+    List<Item> findByName(String name);
 }
