@@ -75,7 +75,7 @@ class UserControllerTest {
 
     @Test
     public void get_user_by_id_happy_path() {
-        User user = getUser();
+        User user = TestUtils.getUser();
         when(userRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(user));
 
         ResponseEntity<User> response = userController.findById(1L);
@@ -88,7 +88,7 @@ class UserControllerTest {
 
     @Test
     public void get_user_by_name_happy_path() {
-        User user = getUser();
+        User user = TestUtils.getUser();
         when(userRepository.findByUsername(anyString())).thenReturn(user);
 
         ResponseEntity<User> response = userController.findByUserName("testUser");
@@ -107,11 +107,5 @@ class UserControllerTest {
 
         assertNotNull(response);
         assertEquals(404, response.getStatusCodeValue());
-    }
-
-    private User getUser() {
-        User user = new User();
-        user.setUsername("testUser");
-        return user;
     }
 }

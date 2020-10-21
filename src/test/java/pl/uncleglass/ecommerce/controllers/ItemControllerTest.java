@@ -28,7 +28,7 @@ class ItemControllerTest {
 
     @Test
     public void get_item_happy_path() {
-        Item item = getItem();
+        Item item = TestUtils.getItem();
         when(itemRepository.findById(anyLong())).thenReturn(java.util.Optional.of(item));
 
         ResponseEntity<Item> response = itemController.getItemById(1L);
@@ -54,7 +54,7 @@ class ItemControllerTest {
 
     @Test
     public void get_items_happy_path() {
-        List<Item> items = getItems();
+        List<Item> items = TestUtils.getItems();
         when(itemRepository.findAll()).thenReturn(items);
 
         ResponseEntity<List<Item>> response = itemController.getItems();
@@ -67,7 +67,7 @@ class ItemControllerTest {
 
     @Test
     public void get_items_by_name_happy_path() {
-        List<Item> items = getItems();
+        List<Item> items = TestUtils.getItems();
         when(itemRepository.findByName(anyString())).thenReturn(items);
 
         ResponseEntity<List<Item>> response = itemController.getItemsByName("test Item");
@@ -86,21 +86,5 @@ class ItemControllerTest {
 
         assertNotNull(response);
         assertEquals(404, response.getStatusCodeValue());
-    }
-
-    private Item getItem() {
-        Item item = new Item();
-        item.setName("test Item");
-        item.setDescription("test description");
-        item.setPrice(new BigDecimal("12"));
-        return item;
-    }
-
-    private List<Item> getItems() {
-        List<Item> items = new ArrayList<>();
-        items.add(getItem());
-        items.add(getItem());
-        items.add(getItem());
-        return items;
     }
 }
