@@ -10,6 +10,8 @@ import pl.uncleglass.ecommerce.model.persistence.repositories.UserRepository;
 import pl.uncleglass.ecommerce.model.requests.CreateUserRequest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -71,4 +73,45 @@ class UserControllerTest {
         assertEquals(400, response.getStatusCodeValue());
     }
 
+    @Test
+    public void get_user_by_id_happy_path() {
+        User user = getUser();
+        when(userRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(user));
+
+        ResponseEntity<User> response = userController.findById(1L);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        User body = response.getBody();
+        assertEquals("testUser", body.getUsername());
+    }
+
+    @Test
+    public void get_user_by_name_happy_path() {
+        User user = getUser();
+        when(userRepository.findByUsername(anyString())).thenReturn(user);
+
+        ResponseEntity<User> response = userController.findByUserName("testUser");
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        User body = response.getBody();
+        assertEquals("testUser", body.getUsername());
+    }
+
+    @Test
+    public void get_user_by_name_no_user() {
+        when(userRepository.findByUsername(anyString())).thenReturn(null);
+
+        ResponseEntity<User> response = userController.findByUserName("testUser");
+
+        assertNotNull(response);
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
+    private User getUser() {
+        User user = new User();
+        user.setUsername("testUser");
+        return user;
+    }
 }
