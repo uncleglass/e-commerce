@@ -49,11 +49,12 @@ public class UserController {
 		user.setCart(cart);
 		if (createUserRequest.getPassword().length() < 7 ||
 				!createUserRequest.getConfirmPassword().equals(createUserRequest.getPassword())) {
-			logger.error("Error with password. Cannot create user {} ", createUserRequest.getConfirmPassword());
+			logger.error("Error with password. Cannot create user {} ", createUserRequest.getUsername());
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
 		userRepository.save(user);
+		logger.info("User {} created correctly", user.getUsername());
 		return ResponseEntity.ok(user);
 	}
 }
